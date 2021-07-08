@@ -199,14 +199,18 @@ function HTTPMethod(){
     fi
 }
 
-######################## HTTP Methods ######################## 
-echo -e "\n${GREEN}[+] HTTP Methods...${CLEAR}"
-#DELETE disabled by default, too dangerous
-# echo -n "DELETE request: "
 FULL_URL="${URL}/${DIR}"
 
 if [ $ONLY_URL -eq 1 ]; then FULL_URL="${URL}" fi
 
+echo -e "\n${GREEN}[+] IP Version...${CLEAR}"
+output "curl --ipv4 $FULL_URL"  $(curl_wapper -4 $FULL_URL)
+output "curl --ipv6 $FULL_URL"  $(curl_wapper -6 $FULL_URL)
+
+######################## HTTP Methods ######################## 
+echo -e "\n${GREEN}[+] HTTP Methods...${CLEAR}"
+#DELETE disabled by default, too dangerous
+# echo -n "DELETE request: "
 for Verb in {"GET","HEAD","POST","PUT","TRACE","TRACK","PATCH","LS","MOVE","CONNECT","OPTIONS"}
 do
 	if [[ $Verb == "POST" ]]; then
@@ -221,9 +225,9 @@ done
 
 ####################### Bugbountytips ##########################
 echo -e "\n${GREEN}[+] Bugbountytips 40x bypass methods...${CLEAR}"
-FULL_URL="${URL}/${DIR%/}"
-if [ $ONLY_URL -eq 1 ]; then FULL_URL="${URL%/}" fi
-payload_Suffux $FULL_URL
+FULL_URL_1="${URL}/${DIR%/}"
+if [ $ONLY_URL -eq 1 ]; then FULL_URL_1="${URL%/}" fi
+payload_Suffux $FULL_URL_1
 
 if [ $ONLY_URL -ne 1 ]; then
 	payload_Between ${URL} ${DIR}
@@ -231,8 +235,6 @@ fi
 
 ########################## HEADERS #############################
 echo -e "\n${GREEN}[+] HEADERS...${CLEAR}"
-FULL_URL="${URL}/${DIR}"
-if [ $ONLY_URL -eq 1 ]; then FULL_URL="${URL}" fi
+# FULL_URL="${URL}/${DIR}"
+# if [ $ONLY_URL -eq 1 ]; then FULL_URL="${URL}" fi
 payload_Header $FULL_URL
-
-
