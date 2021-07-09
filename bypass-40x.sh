@@ -207,23 +207,23 @@ if [ $ONLY_URL -eq 1 ]; then
 fi
 ######################## ip versoin ######################### 
 echo -e "\n${GREEN}[+] IP Version...${CLEAR}"
-output "curl --ipv4 $FULL_URL"  $(curl_wapper -4 $FULL_URL)
-output "curl --ipv6 $FULL_URL"  $(curl_wapper -6 $FULL_URL)
-
+output "curl --ipv4 $FULL_URL"  $(curl_wapper -4 $FULL_URL) &
+output "curl --ipv6 $FULL_URL"  $(curl_wapper -6 $FULL_URL) &
+wait
 ####################### HTTP Methods ######################## 
 echo -e "\n${GREEN}[+] HTTP Methods...${CLEAR}"
 #DELETE disabled by default, too dangerous
 for Verb in {"OPTIONS","HEAD","PUT","POST","TRACE","TRACK","PATCH","MOVE","CONNECT"}
 do
 	if [[ $Verb == "POST" ]]; then
-		output "$Verb \t $FULL_URL" $(curl_wapper -H "Content-Length: 0" -X POST $FULL_URL)
+		output "$Verb \t $FULL_URL" $(curl_wapper -H "Content-Length: 0" -X POST $FULL_URL) &
 	elif [[  $Verb == "HEAD"  ]]; then
-		output "$Verb \t $FULL_URL" $(curl_wapper -m 1 -X HEAD $FULL_URL) # timeout=1
+		output "$Verb \t $FULL_URL" $(curl_wapper -m 1 -X HEAD $FULL_URL) & # timeout=1
 	else
-		output "$Verb \t $FULL_URL" $(curl_wapper -X $Verb $FULL_URL)
+		output "$Verb \t $FULL_URL" $(curl_wapper -X $Verb $FULL_URL) &
 	fi
 done
-
+wait
 ###################### Bugbountytips ##########################
 echo -e "\n${GREEN}[+] Bugbountytips 40x bypass methods...${CLEAR}"
 FULL_URL_1="${URL}/${DIR%/}"
