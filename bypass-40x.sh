@@ -18,6 +18,8 @@ CLEAR="\e[0m"
 
 METHOD="-XGET" # default is GET
 TIMEOUT=-m"0" # TIMEOUT="-m 2"
+COOKIE="" 
+# COOKIE="Cookie: a=b"
 USER_AGENT=-A"Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/91.0.4472.114 Safari/537.36"
 
 #Check optional arguments
@@ -63,7 +65,7 @@ fi
 DIR=${DIR#/}
 
 function curl_wapper(){
-	curl -k -s -o /dev/null --path-as-is -w "%{http_code}","%{size_download}" "$USER_AGENT" "$TIMEOUT" $REDIRECT "$METHOD" "$@"
+	curl -k -s -o /dev/null --path-as-is -w "%{http_code}","%{size_download}" -H "$COOKIE" "$USER_AGENT" "$TIMEOUT" $REDIRECT "$METHOD" "$@"
 }
 
 function payload_Suffux(){
