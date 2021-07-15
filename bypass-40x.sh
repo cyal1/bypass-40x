@@ -78,6 +78,7 @@ function payload_Suffux(){
 		output "${1}%20" $(curl_wapper "${1}%20") &
 		output "${1}%F3%A0%81%A9" $(curl_wapper "${1}%F3%A0%81%A9") &
 		output "${1};/" $(curl_wapper "${1};/") &
+		output "${1};.css" $(curl_wapper "${1};.css") &
 		output "${1}%2f" $(curl_wapper "${1}%2f") &
 		output "${1}.json" $(curl_wapper "${1}.json") &
 		output "${1}%23" $(curl_wapper "${1}%23") &
