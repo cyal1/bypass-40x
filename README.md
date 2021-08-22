@@ -22,6 +22,8 @@ OPTIONS:
 
 ## Reference
 
+https://www.youtube.com/watch?v=tSf_IXfuzXk
+
 https://github.com/iamj0ker/bypass-403
 
 https://github.com/lobuhi/byp4xx
